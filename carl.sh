@@ -124,7 +124,7 @@ echo "Done!"
 # Sign the update.zip
 echo "Signing the update zip..."
 cd ~/android/nightlies/signapk
-java -Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 ../cm7/carl/RacerMod-$MODVER-Carl.zip RacerMod-$MODVER-Carl-signed.zip
+java -Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 ../cm7/carl/RacerMod-$MODVER-Carl.zip ../cm7/carl/RacerMod-$MODVER-Carl-signed.zip
 cd ~/android/nightlies/cm7/carl
 rm RacerMod-$MODVER-Carl.zip
 mv RacerMod-$MODVER-Carl-signed.zip RacerMod-$MODVER-Carl.zip
