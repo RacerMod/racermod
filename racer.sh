@@ -31,11 +31,12 @@ echo "Done!"
 cd ~/android/nightlies/cm7/racer
 
 echo "Unzipping update to temp folder..."
+rm -r temp
 mkdir temp
 unzip cm-7-$DATE-NIGHTLY-mooncake-Racer.zip -d temp
 echo "Done!"
 
-cp boot temp/boot
+cp -r boot temp/boot
 mv temp/boot.img temp/boot/gen2_boot.img
 
 # Unpack gen2_boot.img to get the ramdisk

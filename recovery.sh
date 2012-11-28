@@ -21,8 +21,8 @@ mkdir temp
 echo "Done!"
 
 echo "Copying META-INF & recovery folder..."
-cp recovery temp/recovery
-cp META-INF temp/META-INF
+cp -r recovery temp/recovery
+cp -r META-INF temp/META-INF
 echo "Done!"
 
 # Unpack gen2_recovery.img to get the ramdisk
