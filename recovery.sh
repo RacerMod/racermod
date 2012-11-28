@@ -86,7 +86,7 @@ echo "Done!"
 # Sign the update.zip
 echo "Signing the update zip..."
 cd ~/android/nightlies/signapk
-java -Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 ../cm7/recovery/CWM-5.0.2.8-$MODVER.zip CWM-5.0.2.8-$MODVER-signed.zip
+java -Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 ../cm7/recovery/CWM-5.0.2.8-$MODVER.zip ../cm7/recovery/CWM-5.0.2.8-$MODVER-signed.zip
 cd ~/android/nightlies/cm7/recovery
 rm CWM-5.0.2.8-$MODVER.zip
 mv CWM-5.0.2.8-$MODVER-signed.zip CWM-5.0.2.8-$MODVER.zip
