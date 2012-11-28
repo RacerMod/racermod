@@ -1,0 +1,28 @@
+ui_print("");
+ui_print("|--------------------------------|");
+ui_print("| ClockworkMod Recovery  5.0.2.8 |");
+ui_print("|                ~               |");
+ui_print("| port for ZTE Racer/Carl/Freddo |");
+ui_print("|--------------------------------|");
+ui_print("|        by  mikeioannina        |");
+ui_print("|--------------------------------|");
+ui_print("");
+ui_print("Checking your phone generation...");
+package_extract_file("recovery/check_generation.sh", "/tmp/check_generation.sh");
+set_perm(0, 0, 0755, "/tmp/check_generation.sh");
+run_program("/tmp/check_generation.sh");
+if file_getprop("/tmp/gen.prop","generation") == "1"
+then
+    ui_print("Installing gen1 recovery...");
+    assert(package_extract_file("recovery/gen1_recovery.img", "/tmp/recovery.img"),
+    write_raw_image("/tmp/recovery.img", "recovery"),
+    delete("/tmp/recovery.img"));
+    ui_print("Installation Complete.");
+else
+    ui_print("Installing gen2 recovery...");
+    assert(package_extract_file("recovery/gen2_recovery.img", "/tmp/recovery.img"),
+    write_raw_image("/tmp/recovery.img", "recovery"),
+    delete("/tmp/recovery.img"));
+    ui_print("Installation Complete.");
+endif;
+delete("/tmp/check_generation.sh", "/tmp/gen.prop");

@@ -1,15 +1,21 @@
 cm7/racer/*.zip
+cm7/racer/temp
 cm7/racer/gen1zImage
+cm7/racer/ramdisk.gz
 cm7/racer/boot/gen1_boot.img
 cm7/racer/boot/gen2_boot.img
 
 cm7/carl/*.zip
+cm7/carl/temp
 cm7/carl/gen1zImage
+cm7/car/ramdisk.gz
 cm7/carl/boot/gen1_boot.img
 cm7/carl/boot/gen2_boot.img
 
 cm7/recovery/*.zip
+cm7/recovery/temp
 cm7/recovery/gen1zImage
+cm7/recovery/ramdisk.gz
 cm7/recovery/recovery/gen1_recovery.img
 cm7/recovery/recovery/gen2_recovery.img
 
