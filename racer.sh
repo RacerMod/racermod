@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Copyright 2012 - mikeioannina
 #
@@ -7,7 +7,7 @@
 cd ~/android/cm7
 
 echo "Setting up android build enviroment..."
-. build/envsetup.sh
+source build/envsetup.sh
 
 echo "breakfast mooncake - Racer"
 breakfast mooncake
