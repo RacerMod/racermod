@@ -1,0 +1,15 @@
+cm7/racer/*.zip
+cm7/racer/gen1zImage
+cm7/racer/boot/gen1_boot.img
+cm7/racer/boot/gen2_boot.img
+
+cm7/carl/*.zip
+cm7/carl/gen1zImage
+cm7/carl/boot/gen1_boot.img
+cm7/carl/boot/gen2_boot.img
+
+cm7/recovery/*.zip
+cm7/recovery/gen1zImage
+cm7/recovery/recovery/gen1_recovery.img
+cm7/recovery/recovery/gen2_recovery.img
+
