@@ -22,7 +22,7 @@ brunch mooncake
 export DATE=$(date -u +%Y%m%d)
 echo "Moving update.zip to nightlies folder..."
 rm ~/android/nightlies/cm7/racer/*.zip
-mv ./out/target/product/mooncake/cm-7-$DATE-NIGHTLY-mooncake.zip ~/android/nightlies/cm7/racer/cm-7-$DATE-NIGHTLY-mooncake-Racer.zip
+mv ./out/target/product/mooncake/cm-7-$DATE-UNOFFICIAL-mooncake.zip ~/android/nightlies/cm7/racer/cm-7-$DATE-UNOFFICIAL-mooncake-Racer.zip
 echo "Done!"
 
 
@@ -33,7 +33,7 @@ cd ~/android/nightlies/cm7/racer
 echo "Unzipping update to temp folder..."
 rm -r temp
 mkdir temp
-unzip cm-7-$DATE-NIGHTLY-mooncake-Racer.zip -d temp
+unzip cm-7-$DATE-UNOFFICIAL-mooncake-Racer.zip -d temp
 echo "Done!"
 
 cp -r boot temp/boot
