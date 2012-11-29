@@ -30,7 +30,7 @@ brunch mooncake
 export DATE=$(date -u +%Y%m%d)
 echo "Moving update.zip to nightlies folder..."
 rm ~/android/nightlies/cm7/carl/*.zip
-mv ./out/target/product/mooncake/cm-7-$DATE-NIGHTLY-mooncake.zip ~/android/nightlies/cm7/carl/cm-7-$DATE-NIGHTLY-mooncake-Carl.zip
+mv ./out/target/product/mooncake/cm-7-$DATE-UNOFFICIAL-mooncake.zip ~/android/nightlies/cm7/carl/cm-7-$DATE-UNOFFICIAL-mooncake-Carl.zip
 echo "Done!"
 
 # Change back to AK8973 sensor
@@ -49,7 +49,7 @@ cd ~/android/nightlies/cm7/carl
 echo "Unzipping update to temp folder..."
 rm -r temp
 mkdir temp
-unzip cm-7-$DATE-NIGHTLY-mooncake-Carl.zip -d temp
+unzip cm-7-$DATE-UNOFFICIAL-mooncake-Carl.zip -d temp
 echo "Done!"
 
 cp -r boot temp/boot
