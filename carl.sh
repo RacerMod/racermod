@@ -3,53 +3,37 @@
 # Copyright 2012 - mikeioannina
 #
 
-# Change sensor to AK8962
-cd ~/android/cm7/device/zte/mooncake
-
-echo "Changing sensor from AK8973 to AK8962..."
-cp BoardConfig.mk BoardConfig.bak
-cat BoardConfig.bak | sed -e 's/SENSORS_COMPASS_AK8973 := true/SENSORS_COMPASS_AK8973 := false/' -e 's/SENSORS_COMPASS_AK8962 := false/SENSORS_COMPASS_AK8962 := true/' > BoardConfig.mk
-echo "Done!"
-
 # Build CyanogenMod 7 for ZTE Carl
 cd ~/android/cm7
 
 echo "Setting up android build enviroment..."
 source build/envsetup.sh
 
-echo "breakfast mooncake - Carl"
-breakfast mooncake
+echo "breakfast mooncakec - Carl"
+breakfast mooncakec
 
 echo "Cleaning previous build..."
 make clean
 echo "Done!"
 
-echo "brunch mooncake - Carl"
-brunch mooncake
+echo "brunch mooncakec - Carl"
+brunch mooncakec
 
 export DATE=$(date -u +%Y%m%d)
-echo "Moving update.zip to nightlies folder..."
-rm ~/android/nightlies/cm7/carl/*.zip
-mv ./out/target/product/mooncake/cm-7-$DATE-UNOFFICIAL-mooncake.zip ~/android/nightlies/cm7/carl/cm-7-$DATE-UNOFFICIAL-mooncake-Carl.zip
-echo "Done!"
-
-# Change back to AK8973 sensor
-cd ~/android/cm7/device/zte/mooncake
-
-echo "Changing sensor from AK8962 to AK8973..."
-rm BoardConfig.mk
-mv BoardConfig.bak BoardConfig.mk
+echo "Moving update.zip to racermod folder..."
+rm ~/android/racermod/cm7/carl/*.zip
+mv ./out/target/product/mooncake/cm-7-$DATE-UNOFFICIAL-mooncakec.zip ~/android/racermod/cm7/carl/cm-7-$DATE-UNOFFICIAL-mooncakec.zip
 echo "Done!"
 
 
 
 # Temporary unpack the update.zip file & integrate gen1 & gen2 libs
-cd ~/android/nightlies/cm7/carl
+cd ~/android/racermod/cm7/carl
 
 echo "Unzipping update to temp folder..."
 rm -r temp
 mkdir temp
-unzip cm-7-$DATE-UNOFFICIAL-mooncake-Carl.zip -d temp
+unzip cm-7-$DATE-UNOFFICIAL-mooncakec.zip -d temp
 echo "Done!"
 
 cp -r boot temp/boot
@@ -89,11 +73,15 @@ make -j4
 echo "Done!"
 
 echo "Copying zImage..."
-rm ~/android/nightlies/cm7/carl/gen1zImage
-cp ./arch/arm/boot/zImage ~/android/nightlies/cm7/carl/gen1zImage
+rm ~/android/racermod/cm7/carl/gen1zImage
+cp ./arch/arm/boot/zImage ~/android/racermod/cm7/carl/gen1zImage
 echo "Done!"
 
-cd ~/android/nightlies/cm7/carl
+echo "Cleaning kernel source..."
+make mrproper
+echo "Done!"
+
+cd ~/android/racermod/cm7/carl
 
 echo "Creating gen1_boot.img..."
 ../../mkbootimg --base 0x02A00000 --cmdline 'androidboot.hardware=mooncake console=null' --kernel gen1zImage --ramdisk ramdisk.gz -o temp/boot/gen1_boot.img
@@ -111,7 +99,7 @@ cp updater-script temp/META-INF/com/google/android/updater-script
 echo "Done!"
 
 # Mod Version
-export MODVER="1.3"
+export MODVER="1.5"
 
 # Create new update.zip
 echo "Packing RacerMod-$MODVER-Carl.zip..."
@@ -123,9 +111,9 @@ echo "Done!"
 
 # Sign the update.zip
 echo "Signing the update zip..."
-cd ~/android/nightlies/signapk
+cd ~/android/racermod/signapk
 java -Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 ../cm7/carl/RacerMod-$MODVER-Carl.zip ../cm7/carl/RacerMod-$MODVER-Carl-signed.zip
-cd ~/android/nightlies/cm7/carl
+cd ~/android/racermod/cm7/carl
 rm RacerMod-$MODVER-Carl.zip
 mv RacerMod-$MODVER-Carl-signed.zip RacerMod-$MODVER-Carl.zip
 echo "Done!"

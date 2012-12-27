@@ -20,20 +20,20 @@ echo "brunch mooncake - Racer"
 brunch mooncake
 
 export DATE=$(date -u +%Y%m%d)
-echo "Moving update.zip to nightlies folder..."
-rm ~/android/nightlies/cm7/racer/*.zip
-mv ./out/target/product/mooncake/cm-7-$DATE-UNOFFICIAL-mooncake.zip ~/android/nightlies/cm7/racer/cm-7-$DATE-UNOFFICIAL-mooncake-Racer.zip
+echo "Moving update.zip to racermod folder..."
+rm ~/android/racermod/cm7/racer/*.zip
+mv ./out/target/product/mooncake/cm-7-$DATE-UNOFFICIAL-mooncake.zip ~/android/racermod/cm7/racer/cm-7-$DATE-UNOFFICIAL-mooncake.zip
 echo "Done!"
 
 
 
 # Temporary unpack the update.zip file & integrate gen1 & gen2 libs
-cd ~/android/nightlies/cm7/racer
+cd ~/android/racermod/cm7/racer
 
 echo "Unzipping update to temp folder..."
 rm -r temp
 mkdir temp
-unzip cm-7-$DATE-UNOFFICIAL-mooncake-Racer.zip -d temp
+unzip cm-7-$DATE-UNOFFICIAL-mooncake.zip -d temp
 echo "Done!"
 
 cp -r boot temp/boot
@@ -73,11 +73,15 @@ make -j4
 echo "Done!"
 
 echo "Copying zImage..."
-rm ~/android/nightlies/cm7/racer/gen1zImage
-cp ./arch/arm/boot/zImage ~/android/nightlies/cm7/racer/gen1zImage
+rm ~/android/racermod/cm7/racer/gen1zImage
+cp ./arch/arm/boot/zImage ~/android/racermod/cm7/racer/gen1zImage
 echo "Done!"
 
-cd ~/android/nightlies/cm7/racer
+echo "Cleaning kernel source..."
+make mrproper
+echo "Done!"
+
+cd ~/android/racermod/cm7/racer
 
 echo "Creating gen1_boot.img..."
 ../../mkbootimg --base 0x02A00000 --cmdline 'androidboot.hardware=mooncake console=null' --kernel gen1zImage --ramdisk ramdisk.gz -o temp/boot/gen1_boot.img
@@ -95,7 +99,7 @@ cp updater-script temp/META-INF/com/google/android/updater-script
 echo "Done!"
 
 # Mod Version
-export MODVER="1.3"
+export MODVER="1.5"
 
 # Create new update.zip
 echo "Packing RacerMod-$MODVER-Racer.zip..."
@@ -107,9 +111,9 @@ echo "Done!"
 
 # Sign the update.zip
 echo "Signing the update zip..."
-cd ~/android/nightlies/signapk
+cd ~/android/racermod/signapk
 java -Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 ../cm7/racer/RacerMod-$MODVER-Racer.zip ../cm7/racer/RacerMod-$MODVER-Racer-signed.zip
-cd ~/android/nightlies/cm7/racer
+cd ~/android/racermod/cm7/racer
 rm RacerMod-$MODVER-Racer.zip
 mv RacerMod-$MODVER-Racer-signed.zip RacerMod-$MODVER-Racer.zip
 echo "Done!"

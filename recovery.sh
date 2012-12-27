@@ -3,18 +3,18 @@
 # Copyright 2012 - mikeioannina
 #
 
-# Move gen2 recovery.img to nightlies folder
+# Move gen2 recovery.img to racermod folder
 cd ~/android/cm7
 
-echo "Moving recovery.imp to nightlies folder..."
-rm ~/android/nightlies/cm7/recovery/recovery/gen2_recovery.img
-mv ./out/target/product/mooncake/recovery.img ~/android/nightlies/cm7/recovery/recovery/gen2_recovery.img
+echo "Moving recovery.imp to racermod folder..."
+rm ~/android/racermod/cm7/recovery/recovery/gen2_recovery.img
+mv ./out/target/product/mooncake/recovery.img ~/android/racermod/cm7/recovery/recovery/gen2_recovery.img
 echo "Done!"
 
 
 
 # Create temp dir & integrate gen check script
-cd ~/android/nightlies/cm7/recovery
+cd ~/android/racermod/cm7/recovery
 
 echo "Creating temp folder..."
 mkdir temp
@@ -59,11 +59,11 @@ make -j4
 echo "Done!"
 
 echo "Copying zImage..."
-rm ~/android/nightlies/cm7/recovery/gen1zImage
-cp ./arch/arm/boot/zImage ~/android/nightlies/cm7/recovery/gen1zImage
+rm ~/android/racermod/cm7/recovery/gen1zImage
+cp ./arch/arm/boot/zImage ~/android/racermod/cm7/recovery/gen1zImage
 echo "Done!"
 
-cd ~/android/nightlies/cm7/recovery
+cd ~/android/racermod/cm7/recovery
 
 echo "Creating gen1_recovery.img..."
 ../../mkbootimg --base 0x02A00000 --cmdline 'androidboot.hardware=mooncake console=null' --kernel gen1zImage --ramdisk ramdisk.gz -o temp/recovery/gen1_recovery.img
@@ -72,7 +72,7 @@ echo "Done!"
 
 
 # Mod Version
-export MODVER="1.3"
+export MODVER="1.5"
 
 # Create new update.zip
 echo "Packing CWM-5.0.2.8-$MODVER.zip..."
@@ -85,9 +85,9 @@ echo "Done!"
 
 # Sign the update.zip
 echo "Signing the update zip..."
-cd ~/android/nightlies/signapk
+cd ~/android/racermod/signapk
 java -Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 ../cm7/recovery/CWM-5.0.2.8-$MODVER.zip ../cm7/recovery/CWM-5.0.2.8-$MODVER-signed.zip
-cd ~/android/nightlies/cm7/recovery
+cd ~/android/racermod/cm7/recovery
 rm CWM-5.0.2.8-$MODVER.zip
 mv CWM-5.0.2.8-$MODVER-signed.zip CWM-5.0.2.8-$MODVER.zip
 echo "Done!"
