@@ -12,9 +12,11 @@ source build/envsetup.sh
 echo "breakfast mooncake - Racer"
 breakfast mooncake
 
-echo "Cleaning previous build..."
-make clean
-echo "Done!"
+if [ "$1" = "clean" ]; then
+	echo "Cleaning previous build..."
+	make clean
+	echo "Done!"
+fi
 
 echo "brunch mooncake - Racer"
 brunch mooncake

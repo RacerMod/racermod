@@ -12,9 +12,11 @@ source build/envsetup.sh
 echo "breakfast mooncakec - Carl"
 breakfast mooncakec
 
-echo "Cleaning previous build..."
-make clean
-echo "Done!"
+if [ "$1" = "clean" ]; then
+	echo "Cleaning previous build..."
+	make clean
+	echo "Done!"
+fi
 
 echo "brunch mooncakec - Carl"
 brunch mooncakec
@@ -22,7 +24,7 @@ brunch mooncakec
 export DATE=$(date -u +%Y%m%d)
 echo "Moving update.zip to racermod folder..."
 rm ~/android/racermod/cm7/carl/*.zip
-mv ./out/target/product/mooncake/cm-7-$DATE-UNOFFICIAL-mooncakec.zip ~/android/racermod/cm7/carl/cm-7-$DATE-UNOFFICIAL-mooncakec.zip
+mv ./out/target/product/mooncakec/cm-7-$DATE-UNOFFICIAL-mooncakec.zip ~/android/racermod/cm7/carl/cm-7-$DATE-UNOFFICIAL-mooncakec.zip
 echo "Done!"
 
 

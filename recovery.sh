@@ -44,14 +44,14 @@ cd ~/android/cm7/kernel/zte/msm7x27
 export ARCH=arm
 export CROSS_COMPILE="ccache $CCOMPILER7"
 
-# Racer gen1
+# Mooncake gen1
 echo "Cleaning up & setting .version..."
 make clean
 rm .version
 echo "Done!"
 
-echo "Loading recovery gen1 defconfig..."
-make cyanogen_mooncake_recovery_gen1_defconfig
+echo "Loading gen1 defconfig..."
+make cyanogen_mooncake_gen1_defconfig
 echo "Done!"
 
 echo "Compiling kernel..."
