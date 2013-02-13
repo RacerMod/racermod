@@ -32,37 +32,41 @@ usage=\
 \n
 \n if \$1 = mooncake , we build for ZTE Racer
 \n if \$1 = mooncakec , we build for ZTE Carl/Freddo
+\n if \$1 = recovery , we build CWM recovery
 \n if \$1 = anything else , this message is displayed
 \n if \$2 = clean , we \"make clean\" before building"
 
-if [ "$1" != "mooncake" ] && [ "$1" != "mooncakec" ]; then
+if [ "$1" != "mooncake" ] && [ "$1" != "mooncakec" ] && [ "$1" != "recovery" ]; then
     echo -e $usage
     exit
 else
     if [ "$2" != "clean" ]; then
         echo "Building without \"make clean\"..."
     fi
-    if [ "$1" = "mooncake" ]; then
-        device=mooncakec
-    else
+    if [ "$1" = "recovery" ]; then
         device=mooncake
+        product=recovery
+        image=recovery
+    else
+        if [ "$1" = "mooncake" ]; then
+            device=mooncake
+            product=racer
+        else
+            device=mooncakec
+            product=carl
+        fi
+        image=boot
     fi
 fi
 
-if [ "${device}" = "mooncakec" ]; then
-    product=carl
-else
-    product=racer
-fi
 
-
-# Build CyanogenMod 7
-cd ~/android/cm7
+# Breakfast & clean
+cd ${android}
 
 echo "Setting up android build enviroment..."
 . build/envsetup.sh
 
-echo "breakfast ${device}"
+echo "breakfast ${device}..."
 breakfast ${device}
 
 if [ "$2" = "clean" ]; then
@@ -71,39 +75,65 @@ if [ "$2" = "clean" ]; then
     echo "Done!"
 fi
 
-echo "brunch ${device}"
-brunch ${device}
 
-DATE=$(date -u +%Y%m%d)
-echo "Moving update.zip to racermod folder..."
-rm ${racermod}/cm7/${product}/*.zip
-mv ${android}/out/target/product/${device}/cm-7-$DATE-UNOFFICIAL-${device}.zip ${racermod}/cm7/${product}/cm-7-$DATE-UNOFFICIAL-${device}.zip
-echo "Done!"
+# Recovery build
+if [ "$1" = "recovery" ]; then
+    echo "Making recovery image ..."
+    make -j4 recoveryimage
+
+    echo "Moving recovery.imp to racermod folder..."
+    rm ${racermod}/cm7/${product}/${image}/gen2_${image}.img
+    mv ${android}/out/target/product/${device}/${image}.img ${racermod}/cm7/${product}/${image}/gen2_${image}.img
+    echo "Done!"
+
+# Normal build
+else
+    echo "brunch ${device}..."
+    brunch ${device}
+
+    # TODO: fix package date handling
+    DATE=$(date -u +%Y%m%d)
+    echo "Moving update.zip to racermod folder..."
+    rm ${racermod}/cm7/${product}/*.zip
+    mv ${android}/out/target/product/${device}/cm-7-$DATE-UNOFFICIAL-${device}.zip ${racermod}/cm7/${product}/cm-7-$DATE-UNOFFICIAL-${device}.zip
+    echo "Done!"
+fi
 
 
-
-# Temporary unpack the update.zip file & integrate gen1 & gen2 libs
+# Create temp dir & integrate gen check script / libs
 cd ${racermod}/cm7/${product}
 
-echo "Unzipping update to temp folder..."
+echo "Creating temp folder..."
 rm -r temp
 mkdir temp
-unzip cm-7-$DATE-UNOFFICIAL-${device}.zip -d temp
 echo "Done!"
 
-cp -r boot temp/boot
-mv temp/boot.img temp/boot/gen2_boot.img
+echo "Copying ${image} folder..."
+cp -r ${image} temp/${image}
+echo "Done!"
 
-# Unpack gen2_boot.img to get the ramdisk
-echo "Unpacking gen2_boot.img to get the ramdisk..."
+if [ "$1" != "recovery" ]; then
+    echo "Unzipping update to temp folder & moving gen2_boot.img..."
+    unzip cm-7-$DATE-UNOFFICIAL-${device}.zip -d temp
+    rm -rf temp/META-INF
+    mv temp/boot.img temp/boot/gen2_boot.img
+    echo "Done!"
+fi
+
+echo "Copying META-INF folder..."
+cp -r META-INF temp/META-INF
+echo "Done!"
+
+
+# Unpack gen2_${image}.img to get the ramdisk
+echo "Unpacking gen2_${image}.img to get the ramdisk..."
 rm ramdisk.gz
-${racermod}/split_bootimg.pl temp/boot/gen2_boot.img
+${racermod}/split_bootimg.pl temp/${image}/gen2_${image}.img
 echo "Done!"
 
 # Delete gen2 zImage & rename ramdisk
-rm gen2_boot.img-kernel
-mv gen2_boot.img-ramdisk.gz ramdisk.gz
-
+rm gen2_${image}.img-kernel
+mv gen2_${image}.img-ramdisk.gz ramdisk.gz
 
 
 # Build gen1 kernel and create gen1_boot.img
@@ -139,24 +169,19 @@ echo "Done!"
 cd ${racermod}/cm7/${product}
 
 echo "Creating gen1_boot.img..."
-${racermod}/mkbootimg --base 0x02A00000 --cmdline 'androidboot.hardware=mooncake console=null' --kernel gen1zImage --ramdisk ramdisk.gz -o temp/boot/gen1_boot.img
+${racermod}/mkbootimg --base 0x02A00000 --cmdline 'androidboot.hardware=mooncake console=null' --kernel gen1zImage --ramdisk ramdisk.gz -o temp/boot/gen1_${image}.img
 echo "Done!"
 
-
-
-# Integrate updater-script
-echo "Copying updater-script..."
-rm temp/META-INF/CERT.RSA
-rm temp/META-INF/CERT.SF
-rm temp/META-INF/MANIFEST.MF
-rm temp/META-INF/com/google/android/updater-script
-cp updater-script temp/META-INF/com/google/android/updater-script
-echo "Done!"
+# Define package name
+if [ "$1" = "recovery" ]; then
+    package_name="CWM-5.0.2.8"
+else
+    package_name="RacerMod"
 
 # Create new update.zip
-echo "Packing RacerMod-${modver}-${product}.zip..."
+echo "Packing ${package_name}-${modver}-${product}.zip..."
 cd temp
-zip -r9 ${racermod}/cm7/${product}/RacerMod-${modver}-${product}.zip .
+zip -r9 ${racermod}/cm7/${product}/${package_name}-${modver}-${product}.zip .
 cd ..
 rm -r temp
 echo "Done!"
@@ -164,7 +189,7 @@ echo "Done!"
 # Sign the update.zip
 echo "Signing the update zip..."
 cd ${racermod}/cm7/${product}
-java -Xmx1024m -jar ${racermod}/signapk/signapk.jar -w testkey.x509.pem testkey.pk8 RacerMod-${modver}-${product}.zip RacerMod-${modver}-${product}-signed.zip
-rm RacerMod-${modver}-${product}.zip
-mv RacerMod-${modver}-${product}-signed.zip RacerMod-${modver}-${product}.zip
+java -Xmx1024m -jar ${racermod}/signapk/signapk.jar -w testkey.x509.pem testkey.pk8 ${package_name}-${modver}-${product}.zip ${package_name}-${modver}-${product}-signed.zip
+rm ${package_name}-${modver}-${product}.zip
+mv ${package_name}-${modver}-${product}-signed.zip ${package_name}-${modver}-${product}.zip
 echo "Build finished, package is ready in ${racermod}/cm7/${product}/"
