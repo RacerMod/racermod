@@ -1,3 +1,5 @@
+assert(getprop("ro.product.device") == "mooncake" || getprop("ro.build.product") == "mooncake" || getprop("ro.product.board") == "mooncake" || 
+       getprop("ro.product.device") == "mooncakec" || getprop("ro.build.product") == "mooncakec" || getprop("ro.product.board") == "mooncakec");
 ui_print("");
 ui_print("|--------------------------------|");
 ui_print("| ClockworkMod Recovery  5.0.2.8 |");

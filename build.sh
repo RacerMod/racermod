@@ -153,6 +153,11 @@ fi
 
 echo "Copying META-INF folder..."
 cp -r META-INF temp/META-INF
+
+if [ "$2" = "kernel" ]; then
+    rm -f temp/META-INF/com/google/android/updater-script
+    cp boot-updater-script temp/META-INF/com/google/android/updater-script
+fi
 echo "Done!"
 
 
