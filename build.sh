@@ -60,6 +60,29 @@ else
 fi
 
 
+# Check for update needed in local_manifest
+if [ ! -f "${racermod}/.manifest_v1" ]; then
+    echo "RacerMod repositories need to be synced"
+    if [ -d "${android}/.repo/local_manifests" ]; then
+        echo "Deleting existing local_manifests folder..."
+        rm -rf ${android}/.repo/local_manifests
+        echo "Done!"
+    fi
+
+    echo "Copying RacerMod manifest..."
+    mkdir -p ${android}/.repo/local_manifests
+    cp ${racermod}/racermod.xml ${android}/.repo/local_manifests/
+    echo "Done!"
+
+    echo "Syncing new repositories..."
+    cd ${android}
+    repo sync
+    echo "Done!"
+
+    touch ${racermod}/.manifest_v1
+fi
+
+
 # Breakfast & clean
 cd ${android}
 
@@ -103,12 +126,8 @@ fi
 # Create temp dir & integrate gen check script / libs
 cd ${racermod}/cm7/${product}
 
-echo "Creating temp folder..."
-rm -r temp
-mkdir temp
-echo "Done!"
-
 echo "Copying ${image} folder..."
+mkdir temp
 cp -r ${image} temp/${image}
 echo "Done!"
 
@@ -183,7 +202,7 @@ echo "Packing ${package_name}-${modver}-${product}.zip..."
 cd temp
 zip -r9 ${racermod}/cm7/${product}/${package_name}-${modver}-${product}.zip .
 cd ..
-rm -r temp
+rm -rf temp
 echo "Done!"
 
 # Sign the update.zip

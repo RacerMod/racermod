@@ -22,3 +22,5 @@ cm7/recovery/recovery/gen1_recovery.img
 cm7/recovery/recovery/gen2_recovery.img
 
 website
+
+.manifest_v*
