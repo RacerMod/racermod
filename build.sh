@@ -21,33 +21,45 @@
 android=~/android/cm7
 racermod=~/android/racermod
 
-modver="1.5a2"
+modver="1.5-alpha-2"
 
 usage=\
 "RacerMod build script by mikeioannina
 \n
-\n usage: build.sh \$1 \$2
+\n usage: build.sh \$1 \$2 \$3
 \n
-\n \$2 is optional
+\n \$2 & \$3 are optional
 \n
 \n if \$1 = mooncake , we build for ZTE Racer
 \n if \$1 = mooncakec , we build for ZTE Carl/Freddo
 \n if \$1 = recovery , we build CWM recovery
 \n if \$1 = anything else , this message is displayed
-\n if \$2 = clean , we \"make clean\" before building"
+\n if \$2 = clean , we \"make clean\" before building
+\n if \$2 = kernel , we build only kernel
+\n if \$2 = kernel & \$3 clean , we \"make clean\" before building"
 
 if [ "$1" != "mooncake" ] && [ "$1" != "mooncakec" ] && [ "$1" != "recovery" ]; then
     echo -e $usage
     exit
 else
     if [ "$2" != "clean" ]; then
-        echo "Building without \"make clean\"..."
+        if [ "$2" = "kernel" ]; then
+            if [ "$3" = "clean" ]; then
+                echo "Building without \"make clean\"..."
+            else
+                echo "Kernel build"
+            fi
+        else
+            echo "Building without \"make clean\"..."
+        fi
     fi
     if [ "$1" = "recovery" ]; then
+        echo "Recovery build"
         device=mooncake
         product=recovery
         image=recovery
     else
+        echo "Normal build"
         if [ "$1" = "mooncake" ]; then
             device=mooncake
             product=racer
@@ -92,7 +104,7 @@ echo "Setting up android build enviroment..."
 echo "breakfast ${device}..."
 breakfast ${device}
 
-if [ "$2" = "clean" ]; then
+if [ "$2" = "clean" ] || [ "$3" = "clean" ]; then
     echo "Cleaning previous build..."
     make clean
     echo "Done!"
@@ -100,11 +112,11 @@ fi
 
 
 # Recovery build
-if [ "$1" = "recovery" ]; then
-    echo "Making recovery image ..."
-    make -j4 recoveryimage
+if [ "$1" = "recovery" ] || [ "$2" = "kernel" ]; then
+    echo "Making ${image} image ..."
+    make -j4 ${image}image
 
-    echo "Moving recovery.imp to racermod folder..."
+    echo "Moving ${image}.img to racermod folder..."
     rm ${racermod}/cm7/${product}/${image}/gen2_${image}.img
     mv ${android}/out/target/product/${device}/${image}.img ${racermod}/cm7/${product}/${image}/gen2_${image}.img
     echo "Done!"
@@ -195,7 +207,12 @@ echo "Done!"
 if [ "$1" = "recovery" ]; then
     package_name="CWM-5.0.2.8"
 else
-    package_name="RacerMod"
+    if [ "$2" = "kernel" ]; then
+        package_name="RacerMod-kernel"
+    else
+        package_name="RacerMod"
+    fi
+fi
 
 # Create new update.zip
 echo "Packing ${package_name}-${modver}-${product}.zip..."
