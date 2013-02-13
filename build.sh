@@ -152,7 +152,7 @@ mkdir temp
 cp -r ${image} temp/${image}
 echo -e $CL_GRN "Done!" $CL_RST
 
-if [ "$1" != "recovery" ]; then
+if [ "$1" != "recovery" ] && [ "$2" != "kernel" ]; then
     echo -e $CL_GRN "Unzipping update to temp folder & moving gen2_boot.img..." $CL_RST
     unzip cm-7-$DATE-UNOFFICIAL-${device}.zip -d temp
     rm -rf temp/META-INF
@@ -239,7 +239,7 @@ echo -e $CL_GRN "Done!" $CL_RST
 # Sign the update.zip
 echo -e $CL_GRN "Signing the update zip..." $CL_RST
 cd ${racermod}/cm7/${product}
-java -Xmx1024m -jar ${racermod}/signapk/signapk.jar -w testkey.x509.pem testkey.pk8 ${package_name}-${modver}-${product}.zip ${package_name}-${modver}-${product}-signed.zip
+java -Xmx1024m -jar ${racermod}/signapk/signapk.jar -w ${racermod}/signapk/testkey.x509.pem ${racermod}/signapk/testkey.pk8 ${package_name}-${modver}-${product}.zip ${package_name}-${modver}-${product}-signed.zip
 rm ${package_name}-${modver}-${product}.zip
 mv ${package_name}-${modver}-${product}-signed.zip ${package_name}-${modver}-${product}.zip
 echo -e $CL_GRN "Build finished, package is ready in ${racermod}/cm7/${product}/" $CL_RST
