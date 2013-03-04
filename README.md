@@ -1,4 +1,4 @@
-[RacerMod](http://mikeioannina.droid.tk) build script by mikeioannina
+[RacerMod](http://mikeioannina.gitdroid.com) build script by mikeioannina
 =====================================
 
 Getting Started
