@@ -1,5 +1,12 @@
 cm7/*.zip
 
+cm7/blade/*.zip
+cm7/blade/temp
+cm7/blade/gen1zImage
+cm7/blade/ramdisk.gz
+cm7/blade/boot/gen1_boot.img
+cm7/blade/boot/gen2_boot.img
+
 cm7/racer/*.zip
 cm7/racer/temp
 cm7/racer/gen1zImage
