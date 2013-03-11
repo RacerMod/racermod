@@ -1,8 +1,16 @@
-[RacerMod](http://mikeioannina.droid.tk) build script by mikeioannina
+[RacerMod](http://mikeioannina.gitdroid.com) build script by mikeioannina
 =====================================
 
 Getting Started
 ---------------
+
+Create the directory to clone the CyanogenMod sources:
+
+    mkdir -p ~/android/cm7
+
+Enter the directory:
+
+    cd ~/android/cm7
 
 Initialize your local repository using the CyanogenMod trees, use a command like this:
 
