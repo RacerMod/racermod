@@ -84,9 +84,9 @@ fi
 if [ ! -f "${racermod}/.manifest_v2" ]; then
     echo -e $CL_GRN"RacerMod repositories need to be synced"$CL_RST
     if [ -d "${android}/.repo/local_manifests" ]; then
-        echo -e $CL_GRN"Deleting existing local_manifests folder..."$CL_RST
-        rm -rf ${android}/.repo/local_manifests
-        echo -e $CL_GRN "Done!" $CL_RST
+        echo -e $CL_GRN"Deleting existing local_manifest..."$CL_RST
+        rm -f ${android}/.repo/local_manifests/racermod.xml
+        echo -e $CL_GRN"Done!"$CL_RST
     fi
 
     echo -e $CL_GRN"Copying RacerMod manifest..."$CL_RST
