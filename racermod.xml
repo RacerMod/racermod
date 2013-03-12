@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-  <remove-project name="CyanogenMod/android_build" />
-  <project name="RacerMod/android_build" path="build" remote="github" revision="gingerbread" />
-
-  <remove-project name="CyanogenMod/android_vendor_cyanogen" />
-  <project name="RacerMod/android_vendor_cyanogen" path="vendor/cyanogen" remote="github" revision="gingerbread" />
-
+  <project name="RacerMod/android_device_zte_blade" path="device/zte/blade" remote="github" revision="gingerbread" />
   <project name="RacerMod/android_device_zte_mooncake" path="device/zte/mooncake" remote="github" revision="gingerbread" />
   <project name="RacerMod/android_device_zte_mooncakec" path="device/zte/mooncakec" remote="github" revision="gingerbread" />
   <project name="RacerMod/android_device_zte_mooncake-common" path="device/zte/mooncake-common" remote="github" revision="gingerbread" />
