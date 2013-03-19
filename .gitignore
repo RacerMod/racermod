@@ -1,33 +1,9 @@
 cm7/*.zip
+cm7/zips
 
-cm7/blade/*.zip
 cm7/blade/temp
-cm7/blade/gen1zImage
-cm7/blade/ramdisk.gz
-cm7/blade/boot/gen1_boot.img
-cm7/blade/boot/gen2_boot.img
-
-cm7/racer/*.zip
 cm7/racer/temp
-cm7/racer/gen1zImage
-cm7/racer/ramdisk.gz
-cm7/racer/boot/gen1_boot.img
-cm7/racer/boot/gen2_boot.img
-
-cm7/carl/*.zip
 cm7/carl/temp
-cm7/carl/gen1zImage
-cm7/carl/ramdisk.gz
-cm7/carl/boot/gen1_boot.img
-cm7/carl/boot/gen2_boot.img
-
-cm7/recovery/*.zip
 cm7/recovery/temp
-cm7/recovery/gen1zImage
-cm7/recovery/ramdisk.gz
-cm7/recovery/recovery/gen1_recovery.img
-cm7/recovery/recovery/gen2_recovery.img
 
 website
-
-.manifest_v*
